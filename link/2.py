@@ -11,9 +11,8 @@ class Solution:
     def addTwoNumbers(
         self, l1: Optional[ListNode], l2: Optional[ListNode]
     ) -> Optional[ListNode]:
-        head = ListNode()
-        current = head
-        carry = 0
+        carry, current = 0, ListNode()
+        head = current
 
         while l1 or l2 or carry:
             sum = carry
@@ -50,7 +49,13 @@ def polyfill(l1: List[int], l2: List[int]):
         c2.next = ListNode(val)
         c2 = c2.next
 
-    return Solution().addTwoNumbers(link1.next, link2.next)
+    response = Solution().addTwoNumbers(link1.next, link2.next)
+
+    res: List[int] = []
+    while response:
+        res.append(response.val)
+        response = response.next
+    return res
 
 
 print(polyfill([2, 4, 3], [5, 6, 4]))
