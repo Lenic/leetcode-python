@@ -11,7 +11,7 @@ class Solution:
     def addTwoNumbers(
         self, l1: Optional[ListNode], l2: Optional[ListNode]
     ) -> Optional[ListNode]:
-        carry, current = 0, ListNode()
+        carry, current = int(0), ListNode()
         head = current
 
         while l1 or l2 or carry:
