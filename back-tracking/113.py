@@ -48,11 +48,12 @@ def polyfill(nums: List[Optional[int]], targetSum: int):
             if i >= len(nums):
                 break
 
-            if nums[i] == None:
+            item = nums[i]
+            if item == None:
                 ans.append(None)
             else:
                 currentCount += 1
-                ans.append(TreeNode(nums[i]))
+                ans.append(TreeNode(item))
 
         children = fill(index + len(ans), currentCount)
         if len(children) > 0:
