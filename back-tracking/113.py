@@ -58,14 +58,18 @@ def polyfill(nums: List[Optional[int]], targetSum: int):
         children = fill(index + len(ans), currentCount)
         if len(children) > 0:
             childIndex = -1
+
+            def getChild():
+                nonlocal childIndex
+                childIndex += 1
+                return children[childIndex] if childIndex < len(children) else None
+
             for item in ans:
                 if item == None:
                     continue
 
-                childIndex += 1
-                item.left = children[childIndex] if childIndex < len(children) else None
-                childIndex += 1
-                item.right = children[childIndex] if childIndex < len(children) else None
+                item.left = getChild()
+                item.right = getChild()
 
         return ans
 
