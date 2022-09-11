@@ -9,7 +9,7 @@ class NumArray:
         self.segmentSize = segmentSize
 
         self.data = nums
-        self.prefixSums = [[0] for _ in range(ceil(n / segmentSize))]
+        self.sums = [0] * ceil(n / segmentSize)
 
         remainder = -1
         segmentIndex = 0
@@ -19,47 +19,31 @@ class NumArray:
                 remainder = 0
                 segmentIndex += 1
 
-            segment = self.prefixSums[segmentIndex]
-            segment.append(nums[index] + segment[-1])
+            self.sums[segmentIndex] += nums[index]
 
     def update(self, index: int, val: int) -> None:
         self.data[index] = val
 
         segmentIndex = index // self.segmentSize
-        remainder = index % self.segmentSize
-
-        segment = self.prefixSums[segmentIndex]
-        for i in range(remainder, min(self.segmentSize, len(segment))):
-            if i + 1 == len(segment):
-                break
-
-            segment[i + 1] = self.data[index + i - remainder] + segment[i]
+        self.sums[segmentIndex] = sum(
+            self.data[segmentIndex * self.segmentSize : (segmentIndex + 1) * self.segmentSize]
+        )
 
     def sumRange(self, left: int, right: int) -> int:
         if left == right:
             return self.data[left]
 
         leftSegmentIndex = left // self.segmentSize
-        leftRemainder = left % self.segmentSize
-
         rightSegmentIndex = right // self.segmentSize
-        rightRemainder = right % self.segmentSize
 
-        leftSegment = self.prefixSums[leftSegmentIndex]
         if leftSegmentIndex == rightSegmentIndex:
-            return leftSegment[rightRemainder + 1] - leftSegment[leftRemainder]
+            return sum(self.data[left : right + 1])
 
-        leftSegmentSum = leftSegment[-1] - leftSegment[leftRemainder]
+        currentSum = sum(self.data[left : (leftSegmentIndex + 1) * self.segmentSize])
+        currentSum += sum(self.sums[leftSegmentIndex + 1 : rightSegmentIndex])
+        currentSum += sum(self.data[rightSegmentIndex * self.segmentSize : right + 1])
 
-        rightSegment = self.prefixSums[rightSegmentIndex]
-        rightSegmentSum = rightSegment[rightRemainder + 1]
-
-        sum = leftSegmentSum
-        for val in range(leftSegmentIndex + 1, rightSegmentIndex):
-            sum += self.prefixSums[val][-1]
-        sum += rightSegmentSum
-
-        return sum
+        return currentSum
 
 
 def polyfill(actions: List[str], nums: List[List[Any]]):
@@ -79,6 +63,9 @@ def polyfill(actions: List[str], nums: List[List[Any]]):
                 res.append("null")
     print(res)
 
+
+# [null, 9, null, 8]
+polyfill(["NumArray", "sumRange", "update", "sumRange"], [[[1, 3, 5]], [0, 2], [1, 2], [0, 2]])
 
 # [null,-121,null,118,-104,null,null,-221,-293,null,null]
 polyfill(
@@ -109,10 +96,6 @@ polyfill(
         [4, -67],
     ],
 )
-
-
-# [null, 9, null, 8]
-polyfill(["NumArray", "sumRange", "update", "sumRange"], [[[1, 3, 5]], [0, 2], [1, 2], [0, 2]])
 
 # [null,3,15,7,null,null,null,12,null,5,null]
 polyfill(
