@@ -8,11 +8,12 @@ class Solution:
         if n == 1:
             return 10
 
-        res: List[List[int]] = []
+        res: int = 0
 
         def dfs(ans: List[int], level: int):
             if level == n:
-                res.append(ans[:])
+                nonlocal res
+                res += 1
                 return
 
             for i in range(1 if level == 0 else 0, 10):
@@ -24,7 +25,7 @@ class Solution:
                 ans.pop()
 
         dfs([], 0)
-        return len(res) + self.countNumbersWithUniqueDigits(n - 1)
+        return res + self.countNumbersWithUniqueDigits(n - 1)
 
 
 # 91
