@@ -3,21 +3,29 @@ from typing import List
 
 class Solution:
     def makesquare(self, matchsticks: List[int]) -> bool:
-        totalLen = sum(matchsticks)
-        if totalLen % 4:
+        s = sum(matchsticks)
+        if s % 4:
             return False
         matchsticks.sort(reverse=True)
 
         edges = [0] * 4
-        edgeLen = totalLen // 4
+        edgeLen = s // 4
 
-        def dfs(index: int) -> bool:
+        def dfs(index: int):
             if index == len(matchsticks):
                 return True
 
-            for i in range(4):
+            # push the first edge if it's the first
+            for i in range(1 if index == 0 else 4):
+                # skip if both edges is equal
+                if i > 0 and edges[i] == edges[i - 1]:
+                    continue
+                # skip if the sum great than target edge length
+                if edges[i] + matchsticks[index] > edgeLen:
+                    continue
+
                 edges[i] += matchsticks[index]
-                if edges[i] <= edgeLen and dfs(index + 1):
+                if dfs(index + 1):
                     return True
                 edges[i] -= matchsticks[index]
 
