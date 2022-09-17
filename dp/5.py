@@ -33,7 +33,7 @@ class Solution:
                     # 存储当前子串的左右索引值
                     res = (i, j)
 
-        return "".join(s[i] for i in range(res[0], res[1] + 1))
+        return s[res[0] : res[1] + 1]
 
 
 # "bb"
