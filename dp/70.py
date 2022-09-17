@@ -1,20 +1,14 @@
 class Solution:
     def climbStairs(self, n: int) -> int:
-        res: int = 0
+        if n == 1:
+            return 1
+        if n == 2:
+            return 2
 
-        def dfs(rest: int):
-            if rest < 0:
-                return
-            if rest == 0:
-                nonlocal res
-                res += 1
-                return
-
-            dfs(rest - 1)
-            dfs(rest - 2)
-
-        dfs(n)
-        return res
+        left, right = 1, 2
+        for _ in range(3, n + 1):
+            left, right = right, left + right
+        return right
 
 
 # 2
@@ -23,5 +17,5 @@ print(Solution().climbStairs(2))
 # 3
 print(Solution().climbStairs(3))
 
-# 5
-print(Solution().climbStairs(4))
+# 1836311903
+print(Solution().climbStairs(45))
