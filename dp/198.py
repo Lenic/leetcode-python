@@ -8,14 +8,10 @@ class Solution:
         if len(nums) == 2:
             return max(nums)
 
-        data = [0] * len(nums)
-        data[0] = nums[0]
-        data[1] = max(nums[0], nums[1])
-
+        left, right = nums[0], max(nums[0], nums[1])
         for i in range(2, len(nums)):
-            data[i] = max(data[i - 2] + nums[i], data[i - 1])
-
-        return data[-1]
+            left, right = right, max(left + nums[i], right)
+        return right
 
 
 # 4
