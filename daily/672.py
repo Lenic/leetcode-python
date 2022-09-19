@@ -1,6 +1,3 @@
-from typing import List, MutableSet
-
-
 class Solution:
     def flipLights(self, n: int, presses: int) -> int:
         if presses == 0:
