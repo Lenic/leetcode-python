@@ -1,18 +1,12 @@
 from typing import List
 
-from sys import maxsize
-
 
 class Solution:
     def minFallingPathSum(self, matrix: List[List[int]]) -> int:
         n = len(matrix)
         ans = matrix[0][:]
         for i in range(1, n):
-            next = [maxsize] * n
-            for j in range(n):
-                for k in range(max(j - 1, 0), min(j + 2, n)):
-                    next[k] = min(next[k], ans[j] + matrix[i][k])
-            ans = next
+            ans = [(min(ans[k] for k in range(max(j - 1, 0), min(j + 2, n))) + matrix[i][j]) for j in range(n)]
         return min(ans)
 
 
