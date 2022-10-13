@@ -27,7 +27,7 @@ class Solution:
             if slow is fast:
                 break
         p = head
-        while p != slow:
+        while not (p is slow):
             pNext = p.next
             if pNext != None:
                 p = pNext
