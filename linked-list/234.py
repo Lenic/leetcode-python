@@ -7,32 +7,19 @@ class Solution:
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
         if not head:
             return False
-        if head.next is None:
-            return True
-        cache: List[int] = []
-        slow = fast = ListNode(next=head)
-        while fast:
-            nodeFast = fast.next
-            nodeFast = nodeFast.next if nodeFast else None
-            if nodeFast:
-                fast = nodeFast
+        self.cur = head
+
+        def traversal(node: ListNode) -> bool:
+            if node.next and not traversal(node.next):
+                return False
+            if node.val == self.cur.val:
+                if self.cur.next:
+                    self.cur = self.cur.next
+                return True
             else:
-                break
-            node = slow.next
-            if node:
-                slow = node
-                cache.append(node.val)
-        if fast and fast.next:
-            fast = fast.next
-            slow = slow.next
-        index = len(cache) - 1
-        while slow:
-            slow = slow.next
-            if not slow:
-                break
-            if slow.val == cache[index]:
-                index -= 1
-        return index == -1
+                return False
+
+        return traversal(head)
 
 
 def polyfill(data: List[int]):
