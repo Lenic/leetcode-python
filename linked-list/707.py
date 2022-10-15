@@ -1,74 +1,64 @@
 from typing import List
-from typing_extensions import Self
 
-
-class LinkedNode:
-    def __init__(self, val: int = 0, next: Self | None = None):
-        self.val = val
-        self.next = next
+from listNode import BidirectionalListNode
 
 
 class MyLinkedList:
     def __init__(self):
-        self.size = 0
-        self.head = self.tail = LinkedNode()
+        self.size, self.head, self.tail = 0, BidirectionalListNode(), BidirectionalListNode()
 
     def get(self, index: int) -> int:
-        if index < self.size:
-            cur = self.head
-            for _ in range(index + 1):
-                node = cur.next
-                if node != None:
-                    cur = node
-                else:
-                    break
-            return cur.val
-        else:
-            return -1
+        cur = self.head
+        for _ in range(index + 1):
+            node = cur.next
+            if node != None:
+                cur = node
+            else:
+                return -1
+        return cur.val
 
     def addAtHead(self, val: int) -> None:
-        self.size += 1
-        self.head.next = LinkedNode(val, self.head.next)
-        if self.head is self.tail:
-            self.tail = self.head.next
+        self.addNode(self.head, val)
 
     def addAtTail(self, val: int) -> None:
-        self.size += 1
-        node = LinkedNode(val)
-        self.tail.next = node
-        self.tail = node
+        if self.tail.prev is None:
+            self.addNode(self.head, val)
+        else:
+            self.addNode(self.tail.prev, val)
+
+    def addNode(self, cur: BidirectionalListNode, val: int) -> None:
+        node = BidirectionalListNode(val, cur.next, cur if cur is not self.head else None)
+        if cur.next is None:
+            self.tail.prev = node
+        else:
+            cur.next.prev = node
+        cur.next = node
 
     def addAtIndex(self, index: int, val: int) -> None:
-        if index == 0:
-            self.addAtHead(val)
-        elif index == self.size:
-            self.addAtTail(val)
-        elif 0 < index < self.size:
-            self.size += 1
-            cur = self.head
-            for _ in range(index):
-                node = cur.next
-                if node != None:
-                    cur = node
-                else:
-                    break
-            cur.next = LinkedNode(val, cur.next)
+        cur = self.head
+        for _ in range(index):
+            if cur.next:
+                cur = cur.next
+            else:
+                return
+        self.addNode(cur, val)
 
     def deleteAtIndex(self, index: int) -> None:
-        if 0 <= index < self.size:
-            cur = self.head
-            for _ in range(index):
-                node = cur.next
-                if node != None:
-                    cur = node
-                else:
-                    break
-            target = cur.next
-            if target != None:
-                cur.next = target.next
-            if cur.next == None:
-                self.tail = cur
-            self.size -= 1
+        cur = self.head
+        for _ in range(index + 1):
+            node = cur.next
+            if node is not None:
+                cur = node
+            else:
+                return
+        if cur.prev is not None:
+            cur.prev.next = cur.next
+        if cur.next is not None:
+            cur.next.prev = cur.prev
+        if cur.next is None:
+            self.tail.prev = cur.prev
+        if cur.prev is None:
+            self.head.next = cur.next
 
 
 # Your MyLinkedList object will be instantiated and called as such:
@@ -103,6 +93,42 @@ def polyfill(names: List[str], values: List[List[int]]):
                 res.append("null")
     print(res)
 
+
+# ['null', 'null', -1]
+polyfill(
+    ["MyLinkedList", "deleteAtIndex", "get"],
+    [[], [0], [0]],
+)
+
+# ['null', 'null', 'null', -1]
+polyfill(
+    ["MyLinkedList", "addAtHead", "deleteAtIndex", "get"],
+    [[], [2], [0], [0]],
+)
+
+# ['null', 'null', 'null', 2, 1]
+polyfill(
+    ["MyLinkedList", "addAtHead", "addAtTail", "addAtIndex", "deleteAtIndex", "get", "get"],
+    [[], [2], [1], [1, 3], [1], [0], [1]],
+)
+
+# ['null', 'null', 2, 3, 1]
+polyfill(
+    ["MyLinkedList", "addAtHead", "addAtTail", "addAtIndex", "get", "get", "get"],
+    [[], [2], [1], [1, 3], [0], [1], [2]],
+)
+
+# ['null', 'null', 2, 3, 1]
+polyfill(
+    ["MyLinkedList", "addAtTail", "addAtHead", "addAtIndex", "get", "get", "get"],
+    [[], [1], [2], [1, 3], [0], [1], [2]],
+)
+
+# ['null', 'null', 2, 3, 1]
+polyfill(
+    ["MyLinkedList", "addAtIndex", "addAtIndex", "addAtIndex", "get", "get", "get"],
+    [[], [0, 1], [0, 2], [1, 3], [0], [1], [2]],
+)
 
 # ['null', 'null', -1]
 polyfill(["MyLinkedList", "addAtIndex", "get"], [[], [1, 0], [0]])

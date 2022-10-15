@@ -5,3 +5,9 @@ class ListNode:
     def __init__(self, x: int = 0, next: Self | None = None):
         self.val = x
         self.next = next
+
+
+class BidirectionalListNode(ListNode):
+    def __init__(self, x: int = 0, next: Self | None = None, prev: Self | None = None):
+        super().__init__(x, next)
+        self.prev = prev
