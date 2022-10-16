@@ -19,15 +19,15 @@ class Solution:
         def traversal(node: Node, res: Node):
             while True:
                 target = Node(node.val, res, None, None)
-                if node.child:
-                    traversal(node.child, target)
                 res.next = target
-                while res.next:
-                    res = res.next
+                res = target
+                if node.child:
+                    res = traversal(node.child, target)
                 if node.next:
                     node = node.next
                 else:
                     break
+            return res
 
         traversal(head, dummy)
         if dummy.next:
