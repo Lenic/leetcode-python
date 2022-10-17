@@ -20,3 +20,11 @@ def convertArray(data: List[int]) -> Optional[ListNode]:
         cur.next = ListNode(val)
         cur = cur.next
     return dummy.next
+
+
+def convertLinkedList(head: Optional[ListNode]) -> List[int]:
+    ans: List[int] = []
+    while head:
+        ans.append(head.val)
+        head = head.next
+    return ans
