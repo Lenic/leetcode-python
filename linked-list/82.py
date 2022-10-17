@@ -14,13 +14,9 @@ class Solution:
             if n1.val != n2.val:
                 cur = n1
             else:
-                while n2.next:
-                    n2 = n2.next
-                    if n2.val != n1.val:
-                        cur.next = n2
-                        break
-                if cur.next is not n2:
-                    cur.next = None
+                cur.next = n2.next
+                while cur.next and cur.next.val == n1.val:
+                    cur.next = cur.next.next
         return dummy.next
 
 
