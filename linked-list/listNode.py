@@ -28,3 +28,43 @@ def convertLinkedList(head: Optional[ListNode]) -> List[int]:
         ans.append(head.val)
         head = head.next
     return ans
+
+
+class TreeNode:
+    def __init__(self, val: int = 0, left: Self | None = None, right: Self | None = None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
+def convertArrayToTree(data: List[int | None]) -> Optional[TreeNode]:
+    """根据数组按照层序遍历的方式生成一棵树"""
+    if not data:
+        return None
+
+    item = data[0]
+    if item is None:
+        raise Exception("the index of 0 can't be none.")
+
+    index, root = 1, TreeNode(item)
+    nodes = [root]
+    while nodes and index < len(data):
+        ans: List[TreeNode | None] = []
+        for cur in nodes:
+            if cur is None:
+                continue
+            if index == len(data):
+                break
+            item = data[index]
+            if item is not None:
+                cur.left = TreeNode(item)
+                ans.append(cur.left)
+            if index + 1 == len(data):
+                break
+            item = data[index + 1]
+            if item is not None:
+                cur.right = TreeNode(item)
+                ans.append(cur.right)
+            index += 2
+        nodes = ans
+    return root
