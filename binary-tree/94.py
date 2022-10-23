@@ -8,15 +8,21 @@ class Solution:
         ans: List[int] = []
         if root is None:
             return ans
-
-        def dfs(parent: Optional[TreeNode]):
-            if parent is None:
-                return
-            dfs(parent.left)
-            ans.append(parent.val)
-            dfs(parent.right)
-
-        dfs(root)
+        cur = root
+        while cur:
+            if cur.left is None:
+                ans.append(cur.val)
+                cur = cur.right
+            else:
+                mostRight = cur.left
+                while mostRight.right is not None and mostRight.right is not cur:
+                    mostRight = mostRight.right
+                if mostRight.right is None:
+                    mostRight.right = cur
+                    cur = cur.left
+                else:
+                    ans.append(cur.val)
+                    cur = cur.right
         return ans
 
 
