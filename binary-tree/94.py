@@ -21,6 +21,7 @@ class Solution:
                     mostRight.right = cur
                     cur = cur.left
                 else:
+                    mostRight.right = None
                     ans.append(cur.val)
                     cur = cur.right
         return ans
