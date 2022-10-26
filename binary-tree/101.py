@@ -1,4 +1,6 @@
-from typing import Callable, List, Optional
+from typing import List, Optional
+
+from queue import Queue
 
 from utils import convertArray, TreeNode
 
@@ -7,26 +9,23 @@ class Solution:
     def isSymmetric(self, root: Optional[TreeNode]) -> bool:
         if root is None:
             return True
-
-        def dfs(
-            ans: List[int | None], node: Optional[TreeNode], getChild: Callable[[TreeNode, bool], Optional[TreeNode]]
-        ):
-            if node is None:
-                ans.append(None)
-                return
-            ans.append(node.val)
-            dfs(ans, getChild(node, True), getChild)
-            dfs(ans, getChild(node, False), getChild)
-
-        leftAnswers, rightAnswers = [], []
-        dfs(leftAnswers, root.left, lambda node, isLeft: node.left if isLeft else node.right)
-        dfs(rightAnswers, root.right, lambda node, isLeft: node.right if isLeft else node.left)
-
-        if len(leftAnswers) != len(rightAnswers):
-            return False
-        for i in range(len(leftAnswers)):
-            if leftAnswers[i] != rightAnswers[i]:
+        q: Queue[TreeNode | None] = Queue()
+        q.put(root.left)
+        q.put(root.right)
+        while not q.empty():
+            n1, n2 = q.get(), q.get()
+            if n1 is n2 is None:
+                continue
+            if n1 is None or n2 is None:
                 return False
+            if n1.val != n2.val:
+                return False
+            q.put(n1.left)
+            q.put(n2.right)
+            q.put(n1.right)
+            q.put(n2.left)
+        if q.qsize() != q.qsize():
+            return False
         return True
 
 
