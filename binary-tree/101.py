@@ -1,5 +1,7 @@
 from typing import List, Optional
 
+from queue import Queue
+
 from utils import convertArray, TreeNode
 
 
@@ -7,16 +9,21 @@ class Solution:
     def isSymmetric(self, root: Optional[TreeNode]) -> bool:
         if root is None:
             return True
-        q = [root.left, root.right]
-        while q:
-            n1, n2 = q.pop(0), q.pop(0)
+        q: Queue[TreeNode | None] = Queue()
+        q.put_nowait(root.left)
+        q.put_nowait(root.right)
+        while not q.empty():
+            n1, n2 = q.get_nowait(), q.get_nowait()
             if n1 is None and n2 is None:
                 continue
             if n1 is None or n2 is None:
                 return False
             if n1.val != n2.val:
                 return False
-            q.extend([n1.left, n2.right, n1.right, n2.left])
+            q.put_nowait(n1.left)
+            q.put_nowait(n2.right)
+            q.put_nowait(n1.right)
+            q.put_nowait(n2.left)
         return True
 
 
