@@ -10,7 +10,7 @@ class Solution:
         q = [root.left, root.right]
         while q:
             n1, n2 = q.pop(0), q.pop(0)
-            if n1 is n2 is None:
+            if n1 is None and n2 is None:
                 continue
             if n1 is None or n2 is None:
                 return False
