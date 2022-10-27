@@ -3,44 +3,47 @@ from typing import List
 
 class Solution:
     def decodeString(self, s: str) -> str:
+        baseCodeN = ord("0")
+        baseCodeA = ord("a")
+
+        index = 0
         ans: List[str] = []
-        previous: List[int] = [0]
-
-        for i in range(len(s)):
-            item = s[i]
-            if ord("0") <= ord(item) <= ord("9"):
-                if i > 0 and ord("0") <= ord(s[i - 1]) <= ord("9"):
-                    previous[-1] = previous[-1] * 10 + ord(item) - ord("0")
-                else:
-                    previous.append(ord(item) - ord("0"))
-            elif item == "[":
+        countList: List[int] = []
+        while index < len(s):
+            if 0 <= ord(s[index]) - baseCodeN <= 9:
+                count = 0
+                while 0 <= ord(s[index]) - baseCodeN <= 9:
+                    count = count * 10 + ord(s[index]) - baseCodeN
+                    index += 1
+                countList.append(count)
+            elif 0 <= ord(s[index]) - baseCodeA <= 26:
+                mid = ""
+                while index < len(s) and 0 <= ord(s[index]) - baseCodeA <= 26:
+                    mid += s[index]
+                    index += 1
+                ans.append(mid)
+            elif s[index] == "[":
                 ans.append("[")
-            elif item == "]":
-                fragment = []
-                while True:
-                    inner = ans.pop()
-                    if inner == "[":
-                        break
-                    else:
-                        fragment.append(inner)
-
-                content = "".join(fragment[::-1])
-                for i in range(previous.pop()):
-                    ans.append(content)
-            else:
-                ans.append(item)
-
+                index += 1
+            elif s[index] == "]":
+                fragmentList: List[str] = []
+                while ans[-1] != "[":
+                    fragmentList.append(ans.pop())
+                ans.pop()
+                fragment = "".join(fragmentList[::-1])
+                ans.append("".join(fragment for _ in range(countList.pop())))
+                index += 1
         return "".join(ans)
 
 
-# accaccaccefef
-print(Solution().decodeString("3[a2[c]]2[ef]"))
-
-# abccdcdcdxyz
+# "abccdcdcdxyz"
 print(Solution().decodeString("abc3[cd]xyz"))
 
-# abcabccdcdcdef
+# "abcabccdcdcdef"
 print(Solution().decodeString("2[abc]3[cd]ef"))
 
-# aaabcbc
+# "accaccacc"
+print(Solution().decodeString("3[a2[c]]"))
+
+# "aaabcbc"
 print(Solution().decodeString("3[a]2[bc]"))
