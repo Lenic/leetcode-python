@@ -1,6 +1,8 @@
 from typing import Optional, List
 from typing_extensions import Self
 
+from collections import deque
+
 
 class Node:
     def __init__(self, val: int = 0, left: Self | None = None, right: Self | None = None, next: Self | None = None):
@@ -12,16 +14,19 @@ class Node:
 
 class Solution:
     def connect(self, root: Optional[Node]) -> Optional[Node]:
-        cur, next = [root], []
-        while cur:
-            prev, hasValue = Node(), False
-            for node in cur:
+        q = deque([root])
+        while q:
+            n = len(q)
+            for i in range(n):
+                node = q.popleft()
                 if node is None:
                     continue
-                hasValue = True
-                prev.next, prev = node, node
-                next.extend([node.left, node.right])
-            cur, next = next if hasValue else [], []
+                if i < n - 1:
+                    node.next = q[0]
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
         return root
 
 
