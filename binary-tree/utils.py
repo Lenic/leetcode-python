@@ -38,3 +38,21 @@ def convertArray(data: List[int | None]) -> Optional[TreeNode]:
                     q.put(item.right)
             i += 2
     return root
+
+
+def convertTree(head: Optional[TreeNode]) -> List[int | None]:
+    ans: List[int | None] = []
+    cur, next = [head], []
+    while cur:
+        values, hasValue = [], False
+        for node in cur:
+            if node is None:
+                values.append(None)
+            else:
+                hasValue = True
+                values.append(node.val)
+                next.extend([node.left, node.right])
+        cur, next = next, []
+        if hasValue:
+            ans.extend(values)
+    return ans
