@@ -9,35 +9,29 @@ class Solution:
         if root is None:
             return None
 
-        def dfs(ans: List[TreeNode], parent: Optional[TreeNode], targetValue: int) -> bool:
-            if parent is None:
-                return False
+        parents: dict[int, TreeNode] = {}
 
-            ans.append(parent)
-            if targetValue == parent.val:
-                return True
+        def dfs(parent: TreeNode):
+            if parent.left:
+                parents[parent.left.val] = parent
+                dfs(parent.left)
+            if parent.right:
+                parents[parent.right.val] = parent
+                dfs(parent.right)
 
-            res: bool = False
-            if parent.left is not None:
-                res = dfs(ans, parent.left, targetValue)
-            if res is not True and parent.right is not None:
-                res = dfs(ans, parent.right, targetValue)
+        dfs(root)
 
-            if res is not True:
-                ans.pop()
-            return res
-
-        pPath: List[TreeNode] = []
-        dfs(pPath, root, p.val)
-
-        qPath: List[TreeNode] = []
-        dfs(qPath, root, q.val)
-
-        minCount = min(len(pPath), len(qPath))
-        for i in range(minCount):
-            if pPath[i].val != qPath[i].val:
-                return pPath[i - 1]
-        return pPath[minCount - 1]
+        visited: dict[int, bool] = {}
+        next = p
+        while next:
+            visited[next.val] = True
+            next = parents.get(next.val)
+        next = q
+        while next:
+            if visited.get(next.val):
+                return next
+            next = parents.get(next.val)
+        return None
 
 
 def polyfill(root: List[int | None], p: int, q: int):
