@@ -55,4 +55,6 @@ def convertTree(head: Optional[TreeNode]) -> List[int | None]:
         cur, next = next, []
         if hasValue:
             ans.extend(values)
+    while ans and ans[-1] is None:
+        ans.pop()
     return ans
