@@ -12,31 +12,16 @@ class Node:
 
 class Solution:
     def connect(self, root: Optional[Node]) -> Optional[Node]:
-        cur, prev, next = root, None, None
+        cur = root
         while cur:
-            # 处理前一个元素的 next 指针
-            if prev is not None:
-                link = cur.left or cur.right
-                if link:
-                    prevLink = prev.right or prev.left
-                    if prevLink:
-                        prevLink.next = link
-                    prev = cur
-            # 更新前一个元素的引用
-            else:
-                prev = cur
-            # 关联当前节点的左子树的 next 到右子树
-            if cur.left:
-                cur.left.next = cur.right
-            # 更新下一行的行首元素指针
-            if next is None:
-                next = cur.left or cur.right
-            # 切换到当前行下一个元素继续
-            if cur.next:
+            node = dummy = Node()
+            while cur:
+                if cur.left:
+                    node.next, node = cur.left, cur.left
+                if cur.right:
+                    node.next, node = cur.right, cur.right
                 cur = cur.next
-            # 当前行最后一个元素时的处理逻辑
-            else:
-                prev, cur, next = None, next, None
+            cur = dummy.next
         return root
 
 
