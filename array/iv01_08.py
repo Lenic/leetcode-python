@@ -7,21 +7,16 @@ class Solution:
         Do not return anything, modify matrix in-place instead.
         """
         m, n = len(matrix), len(matrix[0])
-        clone: List[List[int]] = [[-1] * n for _ in range(m)]
+        changedM, changedN = [False] * m, [False] * n
         for i in range(m):
             for j in range(n):
                 if matrix[i][j] == 0:
-                    clone[i][j] = 0
+                    changedM[i] = changedN[j] = True
 
         for i in range(m):
             for j in range(n):
-                if clone[i][j] == 0:
-                    # horizontal
-                    for k in range(n):
-                        matrix[i][k] = 0
-                    # vertical
-                    for k in range(m):
-                        matrix[k][j] = 0
+                if changedM[i] or changedN[j]:
+                    matrix[i][j] = 0
 
 
 def polyfill(matrix: List[List[int]]):
