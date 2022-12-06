@@ -4,14 +4,12 @@ from typing import List
 class Solution:
     def generate(self, numRows: int) -> List[List[int]]:
         ans: List[List[int]] = [[1]]
-        cur = ans[0]
         for _ in range(numRows - 1):
-            next = [1]
+            cur, next = ans[-1], [1]
             for i in range(1, len(cur)):
                 next.append(cur[i - 1] + cur[i])
             next.append(1)
             ans.append(next)
-            cur = next
         return ans
 
 
