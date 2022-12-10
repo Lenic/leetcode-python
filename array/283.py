@@ -3,24 +3,11 @@ from typing import List
 
 class Solution:
     def moveZeroes(self, nums: List[int]) -> None:
-        """
-        Do not return anything, modify nums in-place instead.
-        """
-        left = -1
-        for i, val in enumerate(nums):
-            if val == 0:
-                left = i
-                break
-        if left == -1:
-            return
-        count = 1
-        for i in range(left + 1, len(nums)):
-            if nums[i] == 0:
-                count += 1
-            else:
-                nums[left], left = nums[i], left + 1
-        for i in range(len(nums) - count, len(nums)):
-            nums[i] = 0
+        left = 0
+        for i in range(len(nums)):
+            if nums[i] != 0:
+                nums[left], nums[i] = nums[i], nums[left]
+                left += 1
 
 
 def polyfill(nums: List[int]):
