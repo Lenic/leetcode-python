@@ -1,19 +1,21 @@
 from typing import List
 
+from collections import deque
+
 
 class Solution:
     def removeElement(self, nums: List[int], val: int) -> int:
-        left: int = -1
+        q: deque[int] = deque([])
         for i, item in enumerate(nums):
             if item == val:
-                left = i
+                q.append(i)
+        ans = len(nums) - len(q)
+        for i in range(len(nums) - 1, -1, -1):
+            if not len(q):
                 break
-        if left == -1:
-            return len(nums)
-        for i in range(left + 1, len(nums)):
             if nums[i] != val:
-                nums[left], left = nums[i], left + 1
-        return left
+                nums[q.popleft()] = nums[i]
+        return ans
 
 
 def polyfill(nums: List[int], val: int):
