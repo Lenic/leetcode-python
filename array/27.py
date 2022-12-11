@@ -3,17 +3,16 @@ from typing import List
 
 class Solution:
     def removeElement(self, nums: List[int], val: int) -> int:
-        left, n = -1, len(nums)
+        left: int = -1
         for i, item in enumerate(nums):
             if item == val:
                 left = i
                 break
         if left == -1:
-            return n
-        for i in range(left + 1, n):
-            if val != nums[i]:
-                nums[left] = nums[i]
-                left += 1
+            return len(nums)
+        for i in range(left + 1, len(nums)):
+            if nums[i] != val:
+                nums[left], left = nums[i], left + 1
         return left
 
 
