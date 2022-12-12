@@ -3,13 +3,17 @@ from typing import List
 
 class Solution:
     def sortColors(self, nums: List[int]) -> None:
-        counts = [0] * 3
-        for val in nums:
-            counts[val] += 1
-        index = 0
-        for i, val in enumerate(counts):
-            for j in range(val):
-                nums[index], index = i, index + 1
+        i, lt, gt = 0, -1, len(nums)
+        while i < gt:
+            if nums[i] == 0:
+                lt += 1
+                nums[lt], nums[i] = nums[i], nums[lt]
+                i += 1
+            elif nums[i] == 2:
+                gt -= 1
+                nums[gt], nums[i] = nums[i], nums[gt]
+            else:
+                i += 1
 
 
 def polyfill(nums: List[int]):
