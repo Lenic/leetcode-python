@@ -3,19 +3,18 @@ from typing import List
 
 class Solution:
     def minSubArrayLen(self, target: int, nums: List[int]) -> int:
-        count = len(nums) + 1
-        ans = left = right = 0
-        while left <= right:
-            if ans < target:
-                if right >= len(nums):
-                    break
-                ans += nums[right]
+        ans = len(nums) + 1
+        prefixSum = left = right = 0
+        while right <= len(nums):
+            if prefixSum < target:
+                if right < len(nums):
+                    prefixSum += nums[right]
                 right += 1
             else:
-                count = min(count, right - left)
-                ans -= nums[left]
+                ans = min(ans, right - left)
+                prefixSum -= nums[left]
                 left += 1
-        return count if count <= len(nums) else 0
+        return ans if ans <= len(nums) else 0
 
 
 # 2
