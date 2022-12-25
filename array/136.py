@@ -1,23 +1,11 @@
 from typing import List
 
+from functools import reduce
+
 
 class Solution:
     def singleNumber(self, nums: List[int]) -> int:
-        i, n = 0, len(nums)
-        while i < n:
-            j = i + 1
-            while j < n:
-                if nums[i] == nums[j]:
-                    i += 1
-                    while i < j and nums[i] != nums[j]:
-                        nums[i], nums[j] = nums[j], nums[i]
-                        break
-                    break
-                j += 1
-            if j == n:
-                return nums[i]
-            i += 1
-        return -1
+        return reduce(lambda x, y: x ^ y, nums)
 
 
 # 1
