@@ -1,17 +1,14 @@
 class Solution:
     def firstUniqChar(self, s: str) -> int:
-        cache: dict[str, tuple[int, int]] = {}
+        cache: dict[str, int] = {}
         for i, val in enumerate(s):
-            item = cache.get(val)
-            if item is None:
-                cache[val] = (i, 1)
-            else:
-                cache[val] = (item[0], item[1] + 1)
-        index: int = len(s)
+            cache[val] = -1 if val in cache else i
+        ans: int = len(s)
         for key in cache:
-            if cache[key][1] == 1:
-                index = min(index, cache[key][0])
-        return -1 if index == len(s) else index
+            index = cache[key]
+            if index != -1:
+                ans = min(ans, index)
+        return -1 if ans == len(s) else ans
 
 
 # 0
