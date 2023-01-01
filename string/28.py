@@ -1,6 +1,3 @@
-from typing import List
-
-
 class Solution:
     def strStr(self, haystack: str, needle: str) -> int:
         m, n = len(haystack), len(needle)
