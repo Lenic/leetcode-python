@@ -2,72 +2,41 @@ from typing import List, Optional
 
 from collections import deque
 
-
 from utils import convertArray, convertTree, TreeNode
 
 
 class Codec:
     def serialize(self, root: Optional[TreeNode]) -> str:
-        """Encodes a tree to a single string.
-
-        :type root: TreeNode
-        :rtype: str
-        """
-        ans: List[int | None] = []
-        if root is None:
-            return "[]"
+        ans: List[str] = []
+        if not root:
+            return ""
         q: deque[TreeNode | None] = deque([root])
-        while q:
-            n, hasChildren = len(q), False
-            for _ in range(n):
-                node = q.popleft()
-                if node is None:
-                    ans.append(None)
-                    continue
-                ans.append(node.val)
-                q.append(node.left)
-                q.append(node.right)
-                if not hasChildren:
-                    hasChildren = node.left is not None or node.right is not None
-            if not hasChildren:
-                break
-        while ans[-1] is None:
-            ans.pop()
-        return f"[{','.join(str(val) for val in ans)}]"
+        while len(q):
+            node = q.popleft()
+            if node is None:
+                ans.append("null")
+            else:
+                ans.append(str(node.val))
+                q.extend([node.left, node.right])
+        return ",".join(ans)
 
     def deserialize(self, data: str) -> Optional[TreeNode]:
-        """Decodes your encoded data to tree.
-
-        :type data: str
-        :rtype: TreeNode
-        """
-        if len(data) <= 2:
+        if not data:
             return None
-
-        converted: deque[int | None] = deque([])
-        for val in data[1:-1].split(","):
-            if val == "None":
-                converted.append(None)
-            else:
-                converted.append(int(val))
-
-        root = TreeNode(converted.popleft() or 0)
-        q = deque([root])
-        while q:
+        nodes = list(map(lambda x: None if x == "null" else TreeNode(int(x)), data.split(",")))
+        i, q = 1, deque([nodes[0]])
+        while len(q):
             for _ in range(len(q)):
-                node = q.popleft()
-                children: List[TreeNode | None] = [None, None]
-                for i in range(2):
-                    if not converted:
-                        break
-                    val = converted.popleft()
-                    if val is not None:
-                        newNode = TreeNode(val)
-                        children[i] = newNode
-                        q.append(newNode)
-                node.left = children[0]
-                node.right = children[1]
-        return root
+                cur = q.popleft()
+                if cur is not None:
+                    children: List[TreeNode | None] = [None] * 2
+                    for j in range(i, min(len(nodes), i + 2)):
+                        children[j - i] = nodes[j]
+                        q.append(nodes[j])
+                    cur.left = children[0]
+                    cur.right = children[1]
+                    i += 2
+        return nodes[0]
 
 
 def polyfill(root: List[int | None]):
@@ -75,6 +44,42 @@ def polyfill(root: List[int | None]):
     deser = Codec()
     print(convertTree(deser.deserialize(ser.serialize(convertArray(root)))))
 
+
+# [4,-7,-3,null,null,-9,-3,9,-7,-4,null,6,null,-6,-6,null,null,0,6,5,null,9,null,null,-1,-4,null,null,null,-2]
+polyfill(
+    root=[
+        4,
+        -7,
+        -3,
+        None,
+        None,
+        -9,
+        -3,
+        9,
+        -7,
+        -4,
+        None,
+        6,
+        None,
+        -6,
+        -6,
+        None,
+        None,
+        0,
+        6,
+        5,
+        None,
+        9,
+        None,
+        None,
+        -1,
+        -4,
+        None,
+        None,
+        None,
+        -2,
+    ]
+)
 
 # [1,2]
 polyfill(root=[1, 2])
