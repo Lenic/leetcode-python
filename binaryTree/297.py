@@ -7,18 +7,17 @@ from utils import convertArray, convertTree, TreeNode
 
 class Codec:
     def serialize(self, root: Optional[TreeNode]) -> str:
-        ans: List[str] = []
-        if not root:
-            return ""
-        q: deque[TreeNode | None] = deque([root])
+        ans, n, q = [], 0, deque([root])
         while len(q):
             node = q.popleft()
             if node is None:
+                n += 1
                 ans.append("null")
             else:
+                n = 0
                 ans.append(str(node.val))
                 q.extend([node.left, node.right])
-        return ",".join(ans)
+        return ",".join(ans[:-n])
 
     def deserialize(self, data: str) -> Optional[TreeNode]:
         if not data:
