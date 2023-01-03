@@ -25,16 +25,15 @@ class Codec:
         nodes = list(map(lambda x: None if x == "null" else TreeNode(int(x)), data.split(",")))
         i, q = 1, deque([nodes[0]])
         while len(q):
-            for _ in range(len(q)):
-                cur = q.popleft()
-                if cur is not None:
-                    children: List[TreeNode | None] = [None] * 2
-                    for j in range(i, min(len(nodes), i + 2)):
-                        children[j - i] = nodes[j]
-                        q.append(nodes[j])
-                    cur.left = children[0]
-                    cur.right = children[1]
-                    i += 2
+            cur = q.popleft()
+            if cur is not None:
+                children: List[TreeNode | None] = [None] * 2
+                for j in range(i, min(len(nodes), i + 2)):
+                    children[j - i] = nodes[j]
+                    q.append(nodes[j])
+                cur.left = children[0]
+                cur.right = children[1]
+                i += 2
         return nodes[0]
 
 
