@@ -1,34 +1,23 @@
 from typing import List, Optional
-from listNode import ListNode
+from listNode import convertArray, convertLinkedList, ListNode
 
 
 class Solution:
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        if not head:
+        dummy = ListNode(0, head)
+        if dummy.next is None:
             return None
-        dummy = ListNode(next=head)
-        cur = head.next
-        while cur:
-            head.next = cur.next
-            dummy.next, cur.next = cur, dummy.next
-            cur = head.next
+        cur = dummy.next
+        while cur.next:
+            next = cur.next
+            cur.next = next.next
+            dummy.next, next.next = next, dummy.next
         return dummy.next
 
 
 def polyfill(head: List[int]):
-    cur = dummy = ListNode()
-    for val in head:
-        cur.next = ListNode(val)
-        cur = cur.next
-    res = Solution().reverseList(dummy.next)
-    if not res:
-        print("[]")
-    else:
-        ans: List[int] = []
-        while res:
-            ans.append(res.val)
-            res = res.next
-        print(ans)
+    res = Solution().reverseList(convertArray(head))
+    print(convertLinkedList(res))
 
 
 # [1]
