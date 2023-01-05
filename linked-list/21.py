@@ -1,5 +1,5 @@
 from typing import List, Optional
-from listNode import ListNode
+from listNode import convertArray, convertLinkedList, ListNode
 
 
 class Solution:
@@ -21,22 +21,8 @@ class Solution:
 
 
 def polyfill(l1: List[int], l2: List[int]):
-    def convertArray(data: List[int]) -> Optional[ListNode]:
-        cur = dummy = ListNode()
-        for val in data:
-            cur.next = ListNode(val)
-            cur = cur.next
-        return dummy.next
-
     res = Solution().mergeTwoLists(convertArray(l1), convertArray(l2))
-    if not res:
-        print("[]")
-    else:
-        ans: List[int] = []
-        while res:
-            ans.append(res.val)
-            res = res.next
-        print(ans)
+    print(convertLinkedList(res))
 
 
 # [0]
