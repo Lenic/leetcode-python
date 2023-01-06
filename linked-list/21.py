@@ -4,19 +4,20 @@ from listNode import convertArray, convertLinkedList, ListNode
 
 class Solution:
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
-        res = dummy = ListNode()
-        while list1 and list2:
-            if list1.val <= list2.val:
-                res.next = list1
-                list1 = list1.next
-            else:
-                res.next = list2
-                list2 = list2.next
-            res = res.next
-        res.next = list1 if list1 is not None else list2
-        while res.next:
-            res = res.next
-        res.next = None
+        cur = dummy = ListNode()
+        while list1 or list2:
+            if list1 and list2:
+                if list1.val <= list2.val:
+                    cur.next, list1 = list1, list1.next
+                else:
+                    cur.next, list2 = list2, list2.next
+                cur = cur.next
+            elif list1 is None:
+                cur.next = list2
+                break
+            elif list2 is None:
+                cur.next = list1
+                break
         return dummy.next
 
 
