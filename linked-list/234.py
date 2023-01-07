@@ -1,34 +1,41 @@
 from typing import List, Optional
+from collections import deque
 
-from listNode import ListNode
+from listNode import convertArray, ListNode
 
 
 class Solution:
     def isPalindrome(self, head: Optional[ListNode]) -> bool:
-        if not head:
-            return False
-        self.cur = head
-
-        def traversal(node: ListNode) -> bool:
-            if node.next and not traversal(node.next):
+        if head is None:
+            return True
+        stack: deque[int] = deque([])
+        slow = fast = ListNode(0, head)
+        while fast and fast.next:
+            fast = fast.next.next
+            if slow and slow.next:
+                slow = slow.next
+                stack.append(slow.val)
+        if fast is None and len(stack):
+            stack.pop()
+        while slow and slow.next:
+            slow = slow.next
+            if slow.val != stack.pop():
                 return False
-            if node.val == self.cur.val:
-                if self.cur.next:
-                    self.cur = self.cur.next
-                return True
-            else:
-                return False
-
-        return traversal(head)
+        return True if len(stack) == 0 else False
 
 
 def polyfill(data: List[int]):
-    cur = dummy = ListNode()
-    for item in data:
-        cur.next = ListNode(item)
-        cur = cur.next
-    print(Solution().isPalindrome(dummy.next))
+    print(Solution().isPalindrome(convertArray(data)))
 
+
+# True
+polyfill([1, 0, 1])
+
+# True
+polyfill([1])
+
+# False
+polyfill([1, 0, 0])
 
 # True
 polyfill([1, 2, 2, 1])
