@@ -1,30 +1,15 @@
 from typing import List, Optional
-from typing_extensions import Self
 
-# Definition for singly-linked list.
-class ListNode:
-    def __init__(self, x: int, next: Self | None = None):
-        self.val = x
-        self.next = next
+from listNode import ListNode
 
 
 class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-        if not head:
-            return False
-
-        slow = head
-        fast = slow.next
-        while fast:
-            slowNode = slow.next
-            if slowNode:
-                slow = slowNode
-            for _ in range(2):
-                fastNode = fast.next
-                if fastNode:
-                    fast = fastNode
-                else:
-                    return False
+        slow = fast = ListNode(next=head)
+        while fast and fast.next:
+            fast = fast.next.next
+            if slow:
+                slow = slow.next
             if slow is fast:
                 return True
         return False
