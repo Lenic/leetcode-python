@@ -1,16 +1,26 @@
 from typing import List, Optional
 
+from collections import deque
+
 from utils import convertArray, TreeNode
 
 
 class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
-        def dfs(parent: Optional[TreeNode]) -> int:
-            if parent is None:
-                return 0
-            return max(dfs(parent.left), dfs(parent.right)) + 1
-
-        return dfs(root)
+        ans: int = 0
+        if root is None:
+            return ans
+        q = deque([root])
+        while len(q):
+            ans += 1
+            for _ in range(len(q)):
+                item = q.popleft()
+                if item:
+                    if item.left:
+                        q.append(item.left)
+                    if item.right:
+                        q.append(item.right)
+        return ans
 
 
 def polyfill(root: List[int | None]):
