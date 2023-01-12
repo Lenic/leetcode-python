@@ -1,5 +1,7 @@
 from typing import List, Optional
 
+from collections import deque
+
 from utils import convertArray, TreeNode
 
 
@@ -8,18 +10,17 @@ class Solution:
         ans: List[List[int]] = []
         if root is None:
             return ans
-        cur, next = [root], []
-        while cur:
-            res: List[int] = []
-            for item in cur:
-                if item is None:
-                    continue
-                res.append(item.val)
-                next.append(item.left)
-                next.append(item.right)
-            if res:
-                ans.append(res)
-            cur, next = next, []
+        q = deque([root])
+        while len(q):
+            cur: List[int] = []
+            for _ in range(len(q)):
+                item = q.popleft()
+                cur.append(item.val)
+                if item.left:
+                    q.append(item.left)
+                if item.right:
+                    q.append(item.right)
+            ans.append(cur)
         return ans
 
 
