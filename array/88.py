@@ -5,15 +5,18 @@ from collections import deque
 
 class Solution:
     def merge(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
-        k, mi, ni = m + n - 1, m - 1, n - 1
-        while k >= 0 and ni >= 0:
-            if mi >= 0:
-                if nums1[mi] <= nums2[ni]:
-                    nums1[k], ni, k = nums2[ni], ni - 1, k - 1
-                else:
-                    nums1[k], mi, k = nums1[mi], mi - 1, k - 1
+        last = m + n - 1
+        while n > 0:
+            right = nums2[n - 1]
+            if m == 0:
+                nums1[last], n = right, n - 1
             else:
-                nums1[k], ni, k = nums2[ni], ni - 1, k - 1
+                left = nums1[m - 1]
+                if left <= right:
+                    nums1[last], n = right, n - 1
+                else:
+                    nums1[last], m = left, m - 1
+            last -= 1
 
 
 def polyfill(nums1: List[int], m: int, nums2: List[int], n: int):
