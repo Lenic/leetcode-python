@@ -4,11 +4,10 @@ class Solution:
             return 1
         if n == 2:
             return 2
-
         left, right = 1, 2
-        for _ in range(3, n + 1):
+        for _ in range(3, n):
             left, right = right, left + right
-        return right
+        return left + right
 
 
 # 2
