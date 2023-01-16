@@ -3,11 +3,11 @@ from typing import List
 
 class Solution:
     def maxProfit(self, prices: List[int]) -> int:
-        res, previous = 0, prices[0]
+        ans, prev = 0, prices[0]
         for i in range(1, len(prices)):
-            res = max(res, prices[i] - previous)
-            previous = min(previous, prices[i])
-        return res if res > 0 else 0
+            ans = max(ans, prices[i] - prev)
+            prev = min(prev, prices[i])
+        return ans
 
 
 # 5
