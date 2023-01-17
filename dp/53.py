@@ -3,20 +3,15 @@ from typing import List
 
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
-        maxValue: int = nums[0]
-        if len(nums) == 1:
-            return maxValue
-
-        res = maxValue
+        prev = ans = nums[0]
         for i in range(1, len(nums)):
-            if maxValue <= 0:
-                maxValue = nums[i]
-            else:
-                maxValue += nums[i]
-            res = max(res, maxValue)
+            prev = max(prev + nums[i], nums[i])
+            ans = max(ans, prev)
+        return ans
 
-        return res
 
+# -1
+print(Solution().maxSubArray([-1]))
 
 # 6
 print(Solution().maxSubArray([-2, 1, -3, 4, -1, 2, 1, -5, 4]))
