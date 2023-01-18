@@ -3,10 +3,10 @@ from typing import List
 
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        v0 = v1 = v2 = 0
+        left = right = 0
         for val in nums:
-            v0, v1, v2 = v1, v2, max(v0 + val, v1 + val, v2)
-        return v2
+            left, right = right, max(left + val, right)
+        return right
 
 
 # 4
