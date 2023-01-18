@@ -3,15 +3,10 @@ from typing import List
 
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        if len(nums) == 1:
-            return nums[0]
-        if len(nums) == 2:
-            return max(nums)
-
-        left, right = nums[0], max(nums[0], nums[1])
-        for i in range(2, len(nums)):
-            left, right = right, max(left + nums[i], right)
-        return right
+        v0 = v1 = v2 = 0
+        for val in nums:
+            v0, v1, v2 = v1, v2, max(v0 + val, v1 + val, v2)
+        return v2
 
 
 # 4
