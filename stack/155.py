@@ -1,37 +1,29 @@
-from typing import Any
+from typing import Any, List
+
+from sys import maxsize
 
 
 class MinStack:
-    data: list[int]
-    minStack: list[int]
+    data: List[int]
+    mins: List[int]
 
     def __init__(self):
         self.data = []
-        self.minStack = []
+        self.mins = [maxsize]
 
     def push(self, val: int) -> None:
         self.data.append(val)
-        if not self.minStack:
-            self.minStack.append(val)
-        elif val <= self.minStack[-1]:
-            self.minStack.append(val)
+        self.mins.append(min(self.mins[-1], val))
 
     def pop(self) -> None:
-        if not self.data:
-            return
-        val = self.data.pop()
-        if val == self.minStack[-1]:
-            self.minStack.pop()
+        self.data.pop()
+        self.mins.pop()
 
     def top(self) -> int:
-        if self.data:
-            return self.data[-1]
-        return -1
+        return self.data[-1]
 
     def getMin(self) -> int:
-        if self.minStack:
-            return self.minStack[-1]
-        return -1
+        return self.mins[-1]
 
 
 def polyfill(names: list[str], values: list[Any]):
@@ -52,6 +44,9 @@ def polyfill(names: list[str], values: list[Any]):
                 ans.append(obj.getMin())
     print(ans)
 
+
+# [null,null,-1,-1]
+polyfill(["MinStack", "push", "top", "getMin"], [[], [-1], [], []])
 
 # [null,null,null,null,-2,-1,null,-2]
 polyfill(["MinStack", "push", "push", "push", "getMin", "top", "pop", "getMin"], [[], [-2], [0], [-1], [], [], [], []])
