@@ -1,9 +1,12 @@
 class Solution:
     def reverseBits(self, n: int) -> int:
-        origin = bin(n)[2:]
-        diff = 32 - len(origin)
-        mid = "".join(["0"] * diff + [origin])
-        return int(mid[::-1], 2)
+        ans: int = 0
+        for i in range(32):
+            if n == 0:
+                break
+            ans |= (n & 1) << (31 - i)
+            n >>= 1
+        return ans
 
 
 # 964176192
