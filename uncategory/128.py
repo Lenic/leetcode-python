@@ -11,6 +11,8 @@ class Solution:
             left = right = cur
             if cur in s:
                 s.remove(cur)
+            else:
+                continue
             while True:
                 cur += 1
                 if cur in s:
