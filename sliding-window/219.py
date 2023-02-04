@@ -3,17 +3,21 @@ from typing import List
 
 class Solution:
     def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
-        cache: dict[int, list[int]] = {}
+        s: set[int] = set()
         for i, val in enumerate(nums):
-            if val in cache:
-                if any(abs(i - j) <= k for j in cache[val]):
-                    return True
-                cache[val].append(i)
-            else:
-                cache[val] = [i]
-
+            if i > k:
+                s.remove(nums[i - k - 1])
+            if val in s:
+                return True
+            s.add(val)
         return False
 
+
+# false
+print(Solution().containsNearbyDuplicate(nums=[1, 2], k=2))
+
+# false
+print(Solution().containsNearbyDuplicate(nums=[1], k=1))
 
 # true
 print(Solution().containsNearbyDuplicate(nums=[1, 2, 3, 1], k=3))
