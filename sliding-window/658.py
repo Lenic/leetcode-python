@@ -5,9 +5,7 @@ class Solution:
     def findClosestElements(self, arr: List[int], k: int, x: int) -> List[int]:
         left = 0
         for right in range(k, len(arr)):
-            if arr[left] == arr[right]:
-                left += 1
-            elif abs(arr[left] - x) > abs(arr[right] - x):
+            if arr[left] == arr[right] or abs(arr[left] - x) > abs(arr[right] - x):
                 left += 1
             else:
                 return arr[left:right]
