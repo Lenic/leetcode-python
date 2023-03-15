@@ -3,25 +3,13 @@ from typing import List
 
 class Solution:
     def maxSatisfied(self, customers: List[int], grumpy: List[int], minutes: int) -> int:
-        preset = 0
-        for i in range(len(customers)):
-            if grumpy[i] == 0:
-                preset += customers[i]
-
-        ans = 0
-        for i in range(minutes):
-            if grumpy[i] == 1:
-                ans += customers[i]
-
-        left, cur = 0, ans
+        cur = ans = sum(customers[i] for i in range(minutes) if grumpy[i] == 1)
         for right in range(minutes, len(customers)):
-            if grumpy[right] == 1:
-                cur += customers[right]
-            if grumpy[left] == 1:
-                cur -= customers[left]
-            left += 1
+            cur += customers[right] if grumpy[right] == 1 else 0
+            left = right - minutes
+            cur -= customers[left] if grumpy[left] == 1 else 0
             ans = max(ans, cur)
-        return ans + preset
+        return ans + sum(customers[i] for i in range(len(customers)) if grumpy[i] == 0)
 
 
 # 29
