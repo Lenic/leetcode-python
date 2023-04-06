@@ -8,12 +8,10 @@ class Solution:
         for i, val in enumerate(cardPoints):
             prefixSum[i + 1] = prefixSum[i] + val
         ans: int = 0
+        if n == k:
+            return prefixSum[-1]
         for count in range(-k, k):
-            cur = 0 if count >= 0 else (prefixSum[n] - prefixSum[n + count])
-            rest = k - abs(count)
-            if rest > 0:
-                cur += prefixSum[rest]
-            ans = max(ans, cur)
+            ans = max(ans, (0 if count >= 0 else (prefixSum[n] - prefixSum[n + count])) + prefixSum[k - abs(count)])
         return ans
 
 
