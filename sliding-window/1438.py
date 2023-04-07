@@ -1,23 +1,18 @@
 from typing import List
+from sortedcontainers import SortedList
 
 
 class Solution:
     def longestSubarray(self, nums: List[int], limit: int) -> int:
-        ans, n = 0, len(nums)
-        for left in range(n):
-            right = left
-            minValue = maxValue = nums[left]
-            while right < n - 1:
-                cur = nums[right + 1]
-                if abs(minValue - cur) <= limit and abs(maxValue - cur) <= limit:
-                    if cur < minValue:
-                        minValue = cur
-                    if cur > maxValue:
-                        maxValue = cur
-                    right += 1
-                else:
-                    break
-            ans = max(ans, right - left + 1)
+        ans = left = right = 0
+        cache = SortedList[int]([])
+        while right < len(nums):
+            cache.add(nums[right])
+            right += 1
+            while cache[-1] - cache[0] > limit:
+                cache.remove(nums[left])
+                left += 1
+            ans = max(ans, right - left)
         return ans
 
 
