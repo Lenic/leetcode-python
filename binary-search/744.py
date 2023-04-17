@@ -6,7 +6,7 @@ class Solution:
         left, right = 0, len(letters) - 1
         while left <= right:
             mid = left + ((right - left) >> 1)
-            if target >= letters[mid]:
+            if letters[mid] <= target:
                 left = mid + 1
             else:
                 right = mid - 1
