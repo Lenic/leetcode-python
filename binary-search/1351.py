@@ -3,19 +3,19 @@ from typing import List
 
 class Solution:
     def countNegatives(self, grid: List[List[int]]) -> int:
-        res, n = 0, len(grid[0])
-        last = n
-        for row in grid:
-            left, right = 0, last - 1
+        def search(data: List[int], left: int, right: int) -> int:
             while left <= right:
                 mid = left + ((right - left) >> 1)
-                if row[mid] >= 0:
+                if data[mid] >= 0:
                     left = mid + 1
                 else:
                     right = mid - 1
-            res += n - left
-            last = left
-        return res
+            return left
+
+        ans, n = [], len(grid[0])
+        for val in grid:
+            ans.append(search(val, 0, (ans[-1] if len(ans) else n) - 1))
+        return sum(n - val for val in ans)
 
 
 # 1
